@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     deprecated: /@deprecated\s*(.*?\n)/i,
     fileExtension: /@fileExtension\s*(.*?\n)/i,
     operatingSystem: /@operatingSystem\s*(.*?\n)/i,
-    tutorial: /@tutorial\s*(.*?\n)/i,
+    link: /@link\s*(.*?\n)/i,
     tags: /@tags\s*(.*?\n)/i,
   }
 
@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
       const deprecated = comment.match(regexs.deprecated)
       const fileExtension = comment.match(regexs.fileExtension)
       const operatingSystem = comment.match(regexs.operatingSystem)
-      const tutorial = comment.match(regexs.tutorial)
+      const link = comment.match(regexs.link)
       const tags = comment.match(regexs.tags)
 
       const startIndex = content.indexOf(comment)
@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
       sahub.deprecated = deprecated ? true : false
       sahub.fileExtension = fileExtension ? fileExtension[1].trim() : ''
       sahub.operatingSystem = operatingSystem ? operatingSystem[1].trim() : ''
-      sahub.tutorial = tutorial ? tutorial[1].trim() : ''
+      sahub.link = link ? link[1].trim() : ''
       sahub.tags = tags ? tags[1].trim().replace(/\s*,\s*/g, ';').split(';') : []
       sahub.content = content
       sahub.lineStart = endIndex
@@ -101,7 +101,7 @@ export default defineEventHandler(async (event) => {
           CREATE (s:Snippet {
             description: $description,
             deprecated: $deprecated,
-            tutorial: $tutorial,
+            link: $link,
             startsAt: $lineStart
           })
 
@@ -124,7 +124,7 @@ export default defineEventHandler(async (event) => {
           content: sahub.content,
           description: sahub.description,
           deprecated: sahub.deprecated,
-          tutorial: sahub.tutorial,
+          link: sahub.link,
           lineStart: sahub.lineStart
         })
 

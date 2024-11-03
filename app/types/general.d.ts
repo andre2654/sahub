@@ -4,7 +4,7 @@ export interface Sahub {
   deprecated?: boolean
   fileExtension?: string
   operatingSystem?: string
-  tutorial?: string
+  link?: string
   tags: string[]
   content?: string
   lineStart?: number

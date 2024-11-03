@@ -3,7 +3,7 @@
  * @description Copy text to clipboard
  * @fileExtension ts
  * @operatingSystem MacOs
- * @tutorial https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
+ * @link https://github.com/andre2654/sahub/blob/main/snippets/clipboard.ts
  * @tags copy, clipboard, text, typescript, javascript
  */
 export function copyToClipboard(text: string): void {
@@ -18,7 +18,7 @@ export function copyToClipboard(text: string): void {
 /**
  * @author André Saraiva
  * @description Get the current date in ISO format
- * @tutorial https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
+ * @link https://github.com/andre2654/sahub/blob/main/snippets/clipboard.ts
  * @tags date, iso, format, javascript
  */
 export function getCurrentDate(): string {
