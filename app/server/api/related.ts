@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
       OPTIONAL MATCH (s)-[:IN_FILE]->(f:File)
       RETURN
       s.description AS description,
-      s.tutorial AS tutorial,
+      s.link AS link,
       s.startsAt AS startsAtLine,
       relatedTags AS tags,
       f { .link, .content } AS file
@@ -67,7 +67,10 @@ export default defineEventHandler(async (event) => {
       WITH q, COLLECT(t.name) AS relatedTags
       ORDER BY SIZE(relatedTags) DESC
       LIMIT 5
-      RETURN q.description AS description, q.link AS link, relatedTags AS tags
+      RETURN
+      q.description AS description,
+      q.link AS link,
+      relatedTags AS tags
     `,
       {
         tags

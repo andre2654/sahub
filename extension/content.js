@@ -55,7 +55,7 @@ async function fetchRelatedData(tags) {
   
     snippets.forEach(snippet => {
       const snippetLink = document.createElement('a')
-      snippetLink.href = snippet.file.link
+      snippetLink.href = snippet.link
       snippetLink.innerText = snippet.description
       snippetLink.target = '_blank'
       panelContent.appendChild(snippetLink)
@@ -111,7 +111,7 @@ async function fetchRelatedData(tags) {
 
       const snippetCode = document.createElement('pre')
       snippetCode.innerText = removeFirstNLines(snippet.file.content, snippet.startsAtLine - 1);
-      snippetCode.onclick = () => openLinkInNewTab(snippet.file.link)
+      snippetCode.onclick = () => openLinkInNewTab(snippet.link)
       snippetContent.appendChild(snippetCode)
 
       const snippetDetails = document.createElement('p')
