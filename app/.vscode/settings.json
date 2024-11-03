@@ -1,0 +1,6 @@
+{
+  "prettier.configPath": ".prettierrc",
+  "i18n-ally.localesPaths": ["locales"],
+  "editor.tabSize": 2,
+  "i18n-ally.keystyle": "nested"
+}

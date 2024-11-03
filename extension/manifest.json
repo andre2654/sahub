@@ -1,0 +1,28 @@
+{
+    "manifest_version": 2,
+    "name": "StackOverflow Related Snippets",
+    "version": "1.0",
+    "permissions": [
+        "scripting",
+        "activeTab"
+    ],
+    "host_permissions": [
+        "*://localhost:*/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://stackoverflow.com/questions/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "css": [
+                "content.css"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        "logo.svg"
+    ]
+}
