@@ -2,14 +2,15 @@ import type { stackOverflowQuestion } from '@/types/general'
 import neo4j from 'neo4j-driver'
 
 export default defineEventHandler(async (event) => {
-  const { query } = getQuery(event)
+  const { query, tags } = getQuery(event)
 
   // Database connection variables
   const URI = process.env.DATABASE_URL
   const USER = process.env.DATABASE_USER
   const PASSWORD = process.env.DATABASE_PASSWORD
+  const PAGESIZE = 10
 
-  const url = `https://api.stackexchange.com/search/advanced?site=stackoverflow.com&pagesize=10&q=${query}`
+  const url = `https://api.stackexchange.com/search/advanced?site=stackoverflow.com&pagesize=${PAGESIZE}&q=${query}&tagged=${tags}`
   let driver, session
 
   const response = await fetch(url)
@@ -19,7 +20,7 @@ export default defineEventHandler(async (event) => {
   if (!items) {
     throw createError({
       statusCode: 404,
-      message: `No items found for query: ${query}`
+      message: `No items found for query: ${query} and tags: ${tags}`
     })
   }
 

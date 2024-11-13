@@ -26,7 +26,6 @@ async function fetchRelatedData(tags) {
   function createResultsPanel(snippets, questions) {
     const panel = document.createElement('div')
     panel.id = 'related-snippets-panel'
-    panel.classList.add('opened')
 
     const panelContent = document.createElement('div')
     panelContent.id = 'panel-content'
@@ -55,7 +54,7 @@ async function fetchRelatedData(tags) {
   
     snippets.forEach(snippet => {
       const snippetLink = document.createElement('a')
-      snippetLink.href = snippet.link
+      snippetLink.href = `${snippet.link}#L${snippet.startsAtLine}`
       snippetLink.innerText = snippet.description
       snippetLink.target = '_blank'
       panelContent.appendChild(snippetLink)
@@ -111,7 +110,7 @@ async function fetchRelatedData(tags) {
 
       const snippetCode = document.createElement('pre')
       snippetCode.innerText = removeFirstNLines(snippet.file.content, snippet.startsAtLine - 1);
-      snippetCode.onclick = () => openLinkInNewTab(snippet.link)
+      snippetCode.onclick = () => openLinkInNewTab(`${snippet.link}#L${snippet.startsAtLine}`)
       snippetContent.appendChild(snippetCode)
 
       const snippetDetails = document.createElement('p')

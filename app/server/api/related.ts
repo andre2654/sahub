@@ -40,8 +40,6 @@ export default defineEventHandler(async (event) => {
   session = driver.session({ database: 'neo4j' })
 
   // For each item
-
-
   const result = await session.executeWrite(async tx => {
     const snippets = await tx.run(`
       MATCH (s:Snippet)-[:TAGGED]->(t:Tag)

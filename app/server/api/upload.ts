@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
 
   for (const file of files) {
     const content = file.data.toString('utf-8')
-    const lines = content.split('\n')
+    const extensionOnFile = file?.filename?.split('.').pop() || 'not-found'
 
     const comments = content.match(regexs.comments)
 
@@ -50,8 +50,8 @@ export default defineEventHandler(async (event) => {
       sahub.author = author ? author[1].trim() : ''
       sahub.description = description ? description[1].trim() : ''
       sahub.deprecated = deprecated ? true : false
-      sahub.fileExtension = fileExtension ? fileExtension[1].trim() : ''
-      sahub.operatingSystem = operatingSystem ? operatingSystem[1].trim() : ''
+      sahub.fileExtension = fileExtension ? fileExtension[1].trim() : extensionOnFile
+      sahub.operatingSystem = operatingSystem ? operatingSystem[1].trim() : 'not-found'
       sahub.link = link ? link[1].trim() : ''
       sahub.tags = tags ? tags[1].trim().replace(/\s*,\s*/g, ';').split(';') : []
       sahub.content = content

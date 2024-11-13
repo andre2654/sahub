@@ -45,5 +45,7 @@ const handleFileUpload = async () => {
     method: 'POST',
     body: formData
   })
+
+  alert('Arquivo enviado com sucesso!')
 }
 </script>
