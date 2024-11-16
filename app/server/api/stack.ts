@@ -1,4 +1,4 @@
-import type { stackOverflowQuestion } from '@/types/general'
+import type { StackOverflowQuestion } from '@/types/general'
 import neo4j from 'neo4j-driver'
 
 export default defineEventHandler(async (event) => {
@@ -13,9 +13,9 @@ export default defineEventHandler(async (event) => {
   const url = `https://api.stackexchange.com/search/advanced?site=stackoverflow.com&pagesize=${PAGESIZE}&q=${query}&tagged=${tags}`
   let driver, session
 
-  const response = await fetch(url)
+  const response = await $fetch(url)
   const data = await response.json()
-  const items: stackOverflowQuestion[] = data.items
+  const items: StackOverflowQuestion[] = data.items
 
   if (!items) {
     throw createError({

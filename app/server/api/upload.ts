@@ -47,11 +47,11 @@ export default defineEventHandler(async (event) => {
       const lineStart = content.substring(0, startIndex).split('\n').length
       const endIndex = lineStart + comment.split('\n').length
 
-      sahub.author = author ? author[1].trim() : ''
+      sahub.author = author ? author[1].trim() : null
       sahub.description = description ? description[1].trim() : ''
       sahub.deprecated = deprecated ? true : false
       sahub.fileExtension = fileExtension ? fileExtension[1].trim() : extensionOnFile
-      sahub.operatingSystem = operatingSystem ? operatingSystem[1].trim() : 'not-found'
+      sahub.operatingSystem = operatingSystem ? operatingSystem[1].trim() : null
       sahub.link = link ? link[1].trim() : ''
       sahub.tags = tags ? tags[1].trim().replace(/\s*,\s*/g, ';').split(';') : []
       sahub.content = content
@@ -85,12 +85,6 @@ export default defineEventHandler(async (event) => {
           // Create or Merge Extension
           MERGE (e:Extension {name: $fileExtension})
         
-          // Create or Merge Operating System
-          MERGE (os:OperatingSystem {name: $operatingSystem})
-        
-          // Create or Merge Author
-          MERGE (a:Author {name: $author})
-        
           // Create File
           MERGE (f:File {
             content: $content,
@@ -98,7 +92,7 @@ export default defineEventHandler(async (event) => {
           })
         
           // Create Snippet
-          CREATE (s:Snippet {
+          MERGE (s:Snippet {
             description: $description,
             deprecated: $deprecated,
             link: $link,
@@ -110,12 +104,22 @@ export default defineEventHandler(async (event) => {
             MERGE (t:Tag {name: tag})
             MERGE (s)-[:TAGGED]->(t)
           )
+
+          // Create or Merge Author
+          FOREACH (_ IN CASE WHEN $author IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (a:Author {name: $author})
+            MERGE (s)-[:AUTHORED_BY]->(a)
+          )
+
+          // Create or Merge Operating System
+          FOREACH (_ IN CASE WHEN $operatingSystem IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (os:OperatingSystem {name: $operatingSystem})
+            MERGE (s)-[:FOR_OS]->(os)
+          )
         
           // Connect Snippet to File, Author, Extension, and Operating System
-          MERGE (s)-[:AUTHORED_BY]->(a)
           MERGE (s)-[:IN_FILE]->(f)
           MERGE (s)-[:USES_EXTENSION]->(e)
-          MERGE (s)-[:FOR_OS]->(os)
         `, {
           tags: sahub.tags,
           fileExtension: sahub.fileExtension,
@@ -126,6 +130,8 @@ export default defineEventHandler(async (event) => {
           deprecated: sahub.deprecated,
           link: sahub.link,
           lineStart: sahub.lineStart
+        }).catch(err => {
+          console.log(`-- Error --\n${err}`)
         })
 
         console.log(`Successfully uploaded snippet: ${sahub.description}`)

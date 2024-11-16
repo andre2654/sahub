@@ -64,8 +64,6 @@ export function copyToClipboardNavigator(text: string): void {
 
 /**
  * @description Copy text to clipboard using document.execCommand
- * @fileExtension ts
- * @operatingSystem MacOs
  * @link https://github.com/andre2654/sahub/blob/main/snippets/clipboard.ts
  * @tags copy, clipboard, text, typescript, javascript, document.execCommand
  */

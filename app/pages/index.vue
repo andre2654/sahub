@@ -1,51 +1,111 @@
 <template>
-  <div class="min-h-screen w-full flex flex-col gap-[150px]">
-    <header class="w-full justify-end flex">
-      <img src="/images/logo.svg" alt="Logo" class="w-[95%] sm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] h-auto" />
-    </header>
-    <div class="flex flex-col w-full justify-center items-center gap-2">
-      <div class="uppercase opacity-60">Clique abaixo para salvar um arquivo</div>
-      <button @click="handleFileUpload" class="text-[#1c75d0] border-[3px] border-[#1c75d0] py-2 w-full md:w-[400px] text-[30px] uppercase">Enviar arquivo</button>
-    </div>
-    <div class="w-full bg-[#1c75d0] min-h-[300px] p-[20px] flex flex-col gap-[100px]">
-      <div class="flex flex-col">
-        <h2 class="text-white text-[110px] uppercase leading-[90px]">Detalhes</h2>
-      <h3 class="text-white text-[55px] uppercase leading-[55px]">De sintaxe</h3>
-      </div>
+    <div class="flex min-h-screen w-full flex-col gap-[150px]">
+        <AtomsHeader />
+        <div class="mx-auto flex flex-col gap-3">
+            <AtomsGithubContainer
+                v-if="userStore.user.id"
+                title="Selecione um repositório"
+            >
+                <AtomsRepositoryButton
+                    v-for="repository in userStore.repositories"
+                    class="w-full"
+                    :key="repository.id"
+                    :name="repository.name"
+                    :already-selected="
+                        userRepositories.some(
+                            (repo) => repo.repositoryId === repository.id
+                        )
+                    "
+                    @click="uploadRepository(repository.id, repository.name)"
+                />
+            </AtomsGithubContainer>
 
-      <code class="text-white">
-        @author André Saraiva
-        <br/>
-        @description Copy text to clipboard
-        <br/>
-        @fileExtension ts
-        <br/>
-        @operatingSystem MacOs
-        <br/>
-        @tutorial link
-        <br/>
-        @tags copy, clipboard, text, typescript, javascript
-      </code>
+            <a v-else :href="githubLink">
+                <AtomsGithubContainer
+                    title="Entre com seu github"
+                    class="cursor-pointer"
+                />
+            </a>
+
+            <button
+                class="text-sm text-gray-600 hover:underline"
+                @click="handleFileUpload"
+            >
+                OU CLIQUE AQUI PARA ENVIAR UM ARQUIVO
+            </button>
+        </div>
+        <AtomsFooter />
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
 import { handleFile } from '@/utils/helpers'
 
+const { showGlobalLoading, hideGlobalLoading } = useInterfaceStore()
+const userStore = useUserStore()
+const { githubClientId } = useRuntimeConfig().public
+
+const githubLink = computed(() => {
+    return `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=http://localhost:3000/callback&scope=repo
+`
+})
+
 const handleFileUpload = async () => {
-  const files = await handleFile(true, true, '*')
+    showGlobalLoading()
+    const files = await handleFile(true, true, '*')
 
-  const formData = new FormData()
-  for(let i = 0; i < files.length; i++) {
-    formData.append(`file_${i}`, files[i])
-  }
+    const formData = new FormData()
+    for (let i = 0; i < files.length; i++) {
+        formData.append(`file_${i}`, files[i])
+    }
 
-  const response = await $fetch('/api/upload', {
-    method: 'POST',
-    body: formData
-  })
+    const response = await $fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+    })
 
-  alert('Arquivo enviado com sucesso!')
+    hideGlobalLoading()
+    alert('Arquivo enviado com sucesso!')
 }
+
+const userRepositories = ref([])
+const getRepositories = async () => {
+    showGlobalLoading()
+
+    const response = await $fetch(
+        `/api/github/getRepos?username=${userStore.user.username}`
+    )
+
+    userRepositories.value = response.body.data
+    hideGlobalLoading()
+}
+
+const uploadRepository = async (repoId: number, repoName: string) => {
+    showGlobalLoading()
+
+    const accessToken = userStore.auth.accessToken
+
+    const response = await $fetch('/api/github/upload', {
+        method: 'POST',
+        body: {
+            repository: {
+                id: repoId,
+                name: repoName,
+            },
+            owner: userStore.user,
+        },
+        headers: {
+            Authorization: `bearer ${accessToken}`,
+        },
+    })
+
+    hideGlobalLoading()
+    alert('Repositorio enviado com sucesso!')
+}
+
+onMounted(() => {
+    if (userStore.user.id && userStore.user.username) {
+        getRepositories()
+    }
+})
 </script>

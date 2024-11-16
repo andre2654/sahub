@@ -1,6 +1,38 @@
+import svgLoader from 'vite-svg-loader'
+import { defineNuxtConfig } from 'nuxt/config'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss']
+
+  css: ['~/assets/css/main.scss'],
+
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt'
+  ],
+
+  runtimeConfig: {
+    public: {
+      githubClientId: process.env.GITHUB_CLIENT_ID,
+    },
+    private: {
+      githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
+    }
+  },
+
+  postcss: {
+    plugins: {
+      'tailwindcss/nesting': {},
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
+
+  vite: {
+    plugins: [svgLoader()],
+  },
+
+  compatibilityDate: '2024-11-15',
 })

@@ -10,11 +10,29 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxtjs/tailwindcss": "6.12.2",
+    "@nuxtjs/tailwindcss": "6.12.1",
+    "@pinia-plugin-persistedstate/nuxt": "1.2.1",
+    "@pinia/nuxt": "0.5.3",
+    "adm-zip": "^0.5.16",
     "neo4j-driver": "5.26.0",
-    "nuxt": "3.13.2",
-    "vue": "latest",
-    "vue-router": "latest"
+    "nuxt": "3.12.4",
+    "pinia": "2.2.1",
+    "vue": "3.4.37"
+  },
+  "devDependencies": {
+    "@types/node": "22.4.1",
+    "eslint": "9.9.0",
+    "postcss": "8.4.41",
+    "prettier": "3.3.3",
+    "prettier-plugin-tailwindcss": "0.6.6",
+    "sass": "1.77.6",
+    "typescript": "5.5.4",
+    "vite-svg-loader": "5.1.0"
+  },
+  "proxy": {
+    "*": {
+      "target": "http://myurl"
+    }
   },
   "packageManager": "pnpm@8.14.1+sha512.856c4ecd97c5d3f30354ebc373cd32fb37274295c489db2d0f613a1e60f010cadfbb15036d525f3a06dec1897e4219b3c4f6d3be8f2f62fb0a366bee6aaa7533"
 }

@@ -1,6 +1,23 @@
 {
-  "prettier.configPath": ".prettierrc",
-  "i18n-ally.localesPaths": ["locales"],
-  "editor.tabSize": 2,
-  "i18n-ally.keystyle": "nested"
-}
+    "prettier.configPath": ".prettierrc",
+    "editor.formatOnPaste": false,
+    "editor.formatOnType": false,
+    "editor.formatOnSave": true,
+    "scss.lint.unknownAtRules": "ignore",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "eslint.format.enable": true,
+    "prettier.useEditorConfig": false,
+    "editor.minimap.maxColumn": 80,
+    "editor.minimap.renderCharacters": false,
+    "editor.wordWrap": "wordWrapColumn",
+  
+    "[vue]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[xml]": {
+      "editor.defaultFormatter": "redhat.vscode-xml"
+    },
+    "i18n-ally.localesPaths": ["locales"],
+    "i18n-ally.keystyle": "nested"
+  }
+  

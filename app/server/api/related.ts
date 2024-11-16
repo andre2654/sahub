@@ -1,4 +1,3 @@
-import type { stackOverflowQuestion } from '@/types/general'
 import neo4j from 'neo4j-driver'
 
 export default defineEventHandler(async (event) => {
