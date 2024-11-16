@@ -75,3 +75,55 @@ export function copyToClipboardDocument(text: string): void {
   document.execCommand('copy')
   document.body.removeChild(input)
 }
+
+/**
+ * @description Read text from clipboard
+ * @link https://github.com/andre2654/sahub/blob/main/snippets/clipboard.ts
+ * @tags read, clipboard, text, typescript, javascript, navigator
+ */
+export function readFromClipboard(): Promise<string> {
+  return navigator.clipboard.readText()
+}
+
+/**
+ * @description Check if clipboard access is available
+ * @link https://github.com/andre2654/sahub/blob/main/snippets/clipboard.ts
+ * @tags clipboard, access, typescript, javascript, navigator
+ */
+export function isClipboardAccessAvailable(): boolean {
+  return !!navigator.clipboard
+}
+
+/**
+ * @description Copy HTML to clipboard
+ * @link https://github.com/andre2654/sahub/blob/main/snippets/clipboard.ts
+ * @tags copy, clipboard, html, typescript, javascript, navigator
+ */
+export function copyHtmlToClipboard(html: string): void {
+  const blob = new Blob([html], { type: 'text/html' })
+  const data = [new ClipboardItem({ 'text/html': blob })]
+  navigator.clipboard.write(data)
+}
+
+/**
+ * @description Copy image to clipboard
+ * @link https://github.com/andre2654/sahub/blob/main/snippets/clipboard.ts
+ * @tags copy, clipboard, image, typescript, javascript, navigator
+ */
+export function copyImageToClipboard(imageUrl: string): void {
+  fetch(imageUrl)
+    .then(response => response.blob())
+    .then(blob => {
+      const item = new ClipboardItem({ 'image/png': blob })
+      navigator.clipboard.write([item])
+    })
+}
+
+/**
+ * @description Clear clipboard content
+ * @link https://github.com/andre2654/sahub/blob/main/snippets/clipboard.ts
+ * @tags clear, clipboard, typescript, javascript, navigator
+ */
+export function clearClipboard(): void {
+  navigator.clipboard.writeText('')
+}
