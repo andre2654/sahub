@@ -99,6 +99,13 @@ const uploadRepository = async (repoId: number, repoName: string) => {
         },
     })
 
+    if (response) {
+        userRepositories.value.push({
+            repositoryId: repoId,
+            repositoryName: repoName,
+        })
+    }
+
     hideGlobalLoading()
     alert('Repositorio enviado com sucesso!')
 }

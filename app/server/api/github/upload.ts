@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   let driver, session
 
   const regexs = {
-    comments: /\/\*\*.*?\*\//gs,
+    comments: /\/\*\*.*?@tags.*?\*\//gs,
     author: /@author\s*(.*?\n)/i,
     description: /@description\s*(.*?\n)/i,
     deprecated: /@deprecated\s*(.*?\n)/i,
