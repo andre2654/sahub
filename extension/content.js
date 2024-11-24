@@ -1,3 +1,26 @@
+async function saveQuestionData(tags) {
+  const question = document.querySelector('.question')
+
+  const owner = question.querySelector('.owner .user-info .user-details a')
+  const authorName = owner.innerText
+  const authorId = owner.href.split('/')[2]
+  const accountId = authorId
+  const authorLink = owner.href
+
+  const title = document.querySelector('#question-header .question-hyperlink').innerText
+
+  const link = window.location.href
+
+  const query = new URLSearchParams({ authorName, accountId, authorId, authorLink, tags, title, link })
+
+  await fetch(`http://localhost:3000/api/save?${query.toString()}`, {
+    method: 'GET',
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    },
+  })
+}
+
 async function fetchRelatedData(tags) {
     const response = await fetch(`http://localhost:3000/api/related?tags=${tags}`, {
       method: 'GET',
@@ -135,6 +158,7 @@ async function fetchRelatedData(tags) {
     const tags = getTags()
     if (tags.length > 0) {
       const { snippets, questions } = await fetchRelatedData(tags)
+      saveQuestionData(tags)
       createResultsPanel(snippets, questions)
       insertSnippetsAfterQuestion(snippets)
     }
